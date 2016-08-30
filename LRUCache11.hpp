@@ -341,7 +341,7 @@ public:
 protected:
 	size_t prune() {
 		size_t maxAllowed = maxSize_ + elasticity_;
-		if (maxSize_ <= 0 || cache_.size() < maxAllowed)
+		if (maxSize_ == 0 || cache_.size() < maxAllowed)
 			return 0;
 		size_t count = 0;
 		while (cache_.size() > maxSize_) {

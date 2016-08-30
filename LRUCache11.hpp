@@ -91,9 +91,7 @@ struct Node: private NoCopy {
 		cleanup();
 	}
 	void cleanup() {
-		if (next) {
-			delete next;
-		}
+		delete next;
 		next = nullptr;
 		prev = nullptr;
 	}
@@ -153,9 +151,7 @@ struct List {
 		clear();
 	}
 	void clear() {
-		if (head) {
-			delete head;
-		}
+		delete head;
 		head = nullptr;
 		tail = nullptr;
 		len = 0;

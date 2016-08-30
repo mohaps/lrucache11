@@ -277,6 +277,7 @@ public:
 			iter->second->value = v;
 			keys_.remove(iter->second);
 			keys_.push(iter->second);
+			return;
 		}
 		node_type* n = new node_type(k, v);
 		cache_[k] = n;

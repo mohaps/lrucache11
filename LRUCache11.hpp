@@ -311,6 +311,7 @@ public:
 			return false;
 		}
 		keys_.remove(iter->second);
+		delete iter->second;
 		cache_.erase(iter);
 		return true;
 	}

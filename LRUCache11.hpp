@@ -341,17 +341,16 @@ public:
 protected:
 	size_t prune() {
 		size_t maxAllowed = maxSize_ + elasticity_;
-		if (maxSize_ > 0 && cache_.size() >= maxAllowed) {
-			size_t count = 0;
-			while (cache_.size() > maxSize_) {
-				node_type* n = keys_.pop();
-				std::unique_ptr<node_type> upn(n);
-				cache_.erase(n->key);
-				++count;
-			}
-			return count;
+		if (maxSize_ <= 0 || cache_.size() < maxAllowed)
+			return 0;
+		size_t count = 0;
+		while (cache_.size() > maxSize_) {
+			node_type* n = keys_.pop();
+			std::unique_ptr<node_type> upn(n);
+			cache_.erase(n->key);
+			++count;
 		}
-		return 0;
+		return count;
 	}
 private:
 	mutable Lock lock_;

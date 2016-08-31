@@ -16,10 +16,9 @@ Usage Example
 #include "LRUCache11.hpp"
 namespace lru
 {
-	typedef std::string String;
 	void test()
 	{
-		lru11::Cache<String, String> cache(3,0);
+		lru11::Cache<std::string, std::string> cache(3,0);
 		cache.insert("hello", "world");
 		cache.insert("foo", "bar");
 		

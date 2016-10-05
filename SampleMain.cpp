@@ -1,6 +1,8 @@
 // this is a simple example, seen in the Readme
 
 #include "LRUCache11.hpp"
+#include <iostream>
+
 namespace lru
 {
     void test()

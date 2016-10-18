@@ -39,7 +39,8 @@ Build with ```g++ -o sample_main -std=c++11 SampleMain.cpp```
 
 Note: for older gcc versions like 4.8, 5.0 etc.
 
-add ```-lpthread``` to the compilation line
+add ```-lpthread``` to the compilation line (as suggested by @ekg via https://github.com/mohaps/lrucache11/pull/3
+
 
 License
 -------

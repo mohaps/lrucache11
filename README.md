@@ -37,6 +37,10 @@ int main(int argc, char **argv)
 
 Build with ```g++ -o sample_main -std=c++11 SampleMain.cpp```
 
+Note: for older gcc versions like 4.8, 5.0 etc.
+
+add ```-lpthread``` to the compilation line
+
 License
 -------
 

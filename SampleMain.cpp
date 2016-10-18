@@ -35,9 +35,9 @@
 #include "LRUCache11.hpp"
 
 using namespace lru11;
-typedef kv::Node<std::string, int32_t> KVNode;
-typedef kv::List<std::string, int32_t> KVList;
 typedef Cache<std::string, int32_t> KVCache;
+typedef KVCache::node_type KVNode;
+typedef KVCache::list_type KVList;
 
 // test the vanilla version of the cache
 void testNoLock() {
@@ -64,10 +64,10 @@ void testNoLock() {
 	c.insert("wagamama", 7);
 	cachePrint(c);
 	c.get("blanga");
-	std::cout << "... blanga should move to the bottom ..." << std::endl;
+	std::cout << "... blanga should move to the top..." << std::endl;
 	cachePrint(c);
 	c.get("foo");
-	std::cout << "... foo should move to the bottom ..." << std::endl;
+	std::cout << "... foo should move to the top..." << std::endl;
 	cachePrint(c);
 }
 

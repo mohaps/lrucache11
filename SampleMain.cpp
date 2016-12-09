@@ -25,7 +25,7 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-// compile with g++ -std=c++11 -o sample_main LRUCache11.cpp
+// compile with g++ -std=c++11 -o sample_main LRUCache11.cpp -lpthread
 #include <iostream>
 #include <string>
 #include <vector>

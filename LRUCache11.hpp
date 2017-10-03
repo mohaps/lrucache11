@@ -38,22 +38,6 @@
 #include <unordered_map>
 
 namespace lru11 {
-/**
- * base class to prevent copy
- * use as ClassName : private NoCopy {}
- * to prevent copy constructor of ClassName and assignment by copy
- */
-class NoCopy {
- public:
-  virtual ~NoCopy() = default;
-
- protected:
-  NoCopy() = default;
-
- private:
-  NoCopy(const NoCopy&) = delete;
-  const NoCopy& operator=(const NoCopy&) = delete;
-};
 /*
  * a noop lockable concept that can be used in place of std::mutex
  */
@@ -96,7 +80,7 @@ struct KeyValuePair {
 template <class Key, class Value, class Lock = NullLock,
           class Map = std::unordered_map<
               Key, typename std::list<KeyValuePair<Key, Value>>::iterator>>
-class Cache : private NoCopy {
+class Cache {
  public:
   typedef KeyValuePair<Key, Value> node_type;
   typedef std::list<KeyValuePair<Key, Value>> list_type;
@@ -200,6 +184,10 @@ class Cache : private NoCopy {
   }
 
  private:
+  // Dissallow copying.
+  Cache(const Cache&) = delete;
+  Cache& operator=(const Cache&) = delete;
+
   mutable Lock lock_;
   Map cache_;
   list_type keys_;

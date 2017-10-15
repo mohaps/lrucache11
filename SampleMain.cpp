@@ -18,10 +18,10 @@ namespace lru
 	lru11::Cache<int, int> ic(2);
 	ic.insert(1, 10);
 	ic.insert(2, 20);
-	const auto& iref = ic.get(1);
-	std::cout << "value : "<< iref << std::endl;
+	int i = ic.getCopy(1);
+	std::cout << "value : "<< i << std::endl;
 	ic.insert(3, 30);
-	std::cout << "value (old) : "<< iref << std::endl; 
+	std::cout << "value (old) : "<< i << std::endl; 
     }
 }
 

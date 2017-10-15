@@ -135,6 +135,10 @@ class Cache {
     vOut = iter->second->value;
     return true;
   }
+  /**
+   *	The const reference returned here is only
+   *    guaranteed to be valid till the next insert/delete
+   */
   const Value& get(const Key& k) {
     Guard g(lock_);
     const auto iter = cache_.find(k);
@@ -143,6 +147,12 @@ class Cache {
     }
     keys_.splice(keys_.begin(), keys_, iter->second);
     return iter->second->value;
+  }
+  /**
+   * returns a copy of the stored object (if found)
+   */
+  Value getCopy(const Key& k) {
+   return get(k);
   }
   bool remove(const Key& k) {
     Guard g(lock_);

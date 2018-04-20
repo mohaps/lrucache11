@@ -3,7 +3,7 @@
  * specification of
  * key, value and optionally the map container type (defaults to
  * std::unordered_map)
- * By using the std::map and a linked list of keys it allows O(1) insert, delete
+ * By using the std::unordered_map and a linked list of keys it allows O(1) insert, delete
  * and
  * refresh operations.
  *
@@ -88,9 +88,9 @@ class Cache {
   typedef Lock lock_type;
   using Guard = std::lock_guard<lock_type>;
   /**
-   * the max size is the hard limit of keys and (maxSize + elasticity) is the
-   * soft limit
-   * the cache is allowed to grow till maxSize + elasticity and is pruned back
+   * the maxSize is the soft limit of keys and (maxSize + elasticity) is the
+   * hard limit
+   * the cache is allowed to grow till (maxSize + elasticity) and is pruned back
    * to maxSize keys
    * set maxSize = 0 for an unbounded cache (but in that case, you're better off
    * using a std::unordered_map
@@ -164,7 +164,7 @@ class Cache {
     cache_.erase(iter);
     return true;
   }
-  bool contains(const Key& k) {
+  bool contains(const Key& k) const {
     Guard g(lock_);
     return cache_.find(k) != cache_.end();
   }

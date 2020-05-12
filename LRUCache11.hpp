@@ -62,7 +62,7 @@ struct KeyValuePair {
   K key;
   V value;
 
-  KeyValuePair(const K& k, const V& v) : key(k), value(v) {}
+  KeyValuePair(K k, V v) : key(std::move(k)), value(std::move(v)) {}
 };
 
 /**
@@ -112,7 +112,7 @@ class Cache {
     cache_.clear();
     keys_.clear();
   }
-  void insert(const Key& k, const Value& v) {
+  void insert(const Key& k, Value v) {
     Guard g(lock_);
     const auto iter = cache_.find(k);
     if (iter != cache_.end()) {
@@ -121,7 +121,7 @@ class Cache {
       return;
     }
 
-    keys_.emplace_front(k, v);
+    keys_.emplace_front(k, std::move(v));
     cache_[k] = keys_.begin();
     prune();
   }
@@ -194,7 +194,7 @@ class Cache {
   }
 
  private:
-  // Dissallow copying.
+  // Disallow copying.
   Cache(const Cache&) = delete;
   Cache& operator=(const Cache&) = delete;
 

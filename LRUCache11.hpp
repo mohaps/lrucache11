@@ -153,20 +153,20 @@ class Cache {
     Guard g(lock_);
     return get_nolock(k);
   }
-  /**
-   * returns a copy of the stored object (if found)
-   * safe to use/recommended in multi-threaded apps
-   */
-  Value get(const Key& k) {
-    Guard g(lock_);
-    return get_nolock(k);
-  }
 
   /**
       added for backward compatibility
    */
+  Value get(const Key& k) {
+    return getCopy();
+  }
+  /**
+   * returns a copy of the stored object (if found)
+   * safe to use/recommended in multi-threaded apps
+   */
   Value getCopy(const Key& k) {
-    return get(k);
+    Guard g(lock_);
+    return get_nolock(k);
   }
 
   bool remove(const Key& k) {

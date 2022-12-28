@@ -125,35 +125,50 @@ class Cache {
     cache_[k] = keys_.begin();
     prune();
   }
+  /**
+    for backward compatibity. redirects to tryGetCopy()
+   */
   bool tryGet(const Key& kIn, Value& vOut) {
+    return tryGetCopy(kIn, vOut);
+  }
+
+  bool tryGetCopy(const Key& kIn, Value& vOut) {
     Guard g(lock_);
-    const auto iter = cache_.find(kIn);
-    if (iter == cache_.end()) {
-      return false;
-    }
-    keys_.splice(keys_.begin(), keys_, iter->second);
-    vOut = iter->second->value;
+    Value tmp;
+    if (!tryGetRef_nolock(kIn, tmp)) { return false; }
+    vOut = tmp;
     return true;
+  }
+  
+  bool tryGetRef(const Key& kIn, Value& vOut) {
+    Guard g(lock_);
+    return tryGetRef_nolock(kIn, vOut);
   }
   /**
    *	The const reference returned here is only
    *    guaranteed to be valid till the next insert/delete
+   *  in multi-threaded apps use getCopy() to be threadsafe
    */
-  const Value& get(const Key& k) {
+  const Value& getRef(const Key& k) {
     Guard g(lock_);
-    const auto iter = cache_.find(k);
-    if (iter == cache_.end()) {
-      throw KeyNotFound();
-    }
-    keys_.splice(keys_.begin(), keys_, iter->second);
-    return iter->second->value;
+    return get_nolock(k);
   }
   /**
    * returns a copy of the stored object (if found)
+   * safe to use/recommended in multi-threaded apps
+   */
+  Value get(const Key& k) {
+    Guard g(lock_);
+    return get_nolock(k);
+  }
+
+  /**
+      added for backward compatibility
    */
   Value getCopy(const Key& k) {
-   return get(k);
+    return get(k);
   }
+
   bool remove(const Key& k) {
     Guard g(lock_);
     auto iter = cache_.find(k);
@@ -179,6 +194,23 @@ class Cache {
   }
 
  protected:
+  const Value& get_nolock(const Key& k) {
+    const auto iter = cache_.find(k);
+    if (iter == cache_.end()) {
+      throw KeyNotFound();
+    }
+    keys_.splice(keys_.begin(), keys_, iter->second);
+    return iter->second->value;
+  }
+  bool tryGetRef_nolock(const Key& kIn, Value& vOut) {
+    const auto iter = cache_.find(kIn);
+    if (iter == cache_.end()) {
+      return false;
+    }
+    keys_.splice(keys_.begin(), keys_, iter->second);
+    vOut = iter->second->value;
+    return true;
+  }
   size_t prune() {
     size_t maxAllowed = maxSize_ + elasticity_;
     if (maxSize_ == 0 || cache_.size() < maxAllowed) {

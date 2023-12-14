@@ -158,7 +158,7 @@ class Cache {
       added for backward compatibility
    */
   Value get(const Key& k) {
-    return getCopy();
+    return getCopy(k);
   }
   /**
    * returns a copy of the stored object (if found)

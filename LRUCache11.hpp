@@ -125,6 +125,12 @@ class Cache {
     cache_[k] = keys_.begin();
     prune();
   }
+  void emplace(const Key& k, Value&& v) {
+    Guard g(lock_);
+    keys_.emplace_front(k, std::move(v));
+    cache_[k] = keys_.begin();
+    prune();
+  }
   /**
     for backward compatibity. redirects to tryGetCopy()
    */
